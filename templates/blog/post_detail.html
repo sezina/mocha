@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>{{ post.title }}</h2>
+{{ post.body_html|safe }}
+
+{% if comments %}
+    <p>Comments:</p>
+{% endif %}
+
+{% for comment in comments %}
+    <div class="comment">
+        <div class="time">{{ comment.comment_date }} | {{ comment.visitor }}</div>
+        <div class="body">{{ comment.body_html|safe }}</div>
+    </div>
+{% endfor %}
+
+<div id="add-comment">Add a comment</div>
+<form action="/comments{{ post.get_absolute_url }}" method="POST">
+    {{form }}
+    {{ form.visitor }}
+    <div id = submit><input type="submit" value="Submit" /></div>
+</form>
+
+{% endblock %}

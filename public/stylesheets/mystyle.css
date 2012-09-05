@@ -1,0 +1,20 @@
+.navbar-inner .container, .container {
+  width: 1000px;
+}
+
+.footer {
+  border-top: 1px solid #E5E5E5;
+  margin-top: 45px;
+  padding: 35px 0 36px;
+}
+
+.content {
+  background-color: #EEEEEE;
+  border-radius: 0 0 6px 6px;
+  margin-top: 60px;
+  padding: 60px;
+}
+
+.codehilite pre {
+  font-size: 14px;
+}
