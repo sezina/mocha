@@ -16,8 +16,3 @@ admin.site.register(Post, PostAdmin)
 
 
 admin.site.register(Link)
-
-class CommentAdmin(admin.ModelAdmin):
-    display_fields = ["post", "visitor", "comment_date"]
-
-admin.site.register(Comment, CommentAdmin)

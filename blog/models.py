@@ -1,5 +1,6 @@
 from django.db import models
 from django.forms import ModelForm
+from django.utils.encoding import smart_str
 
 # Create your models here.
 import datetime
@@ -72,8 +73,8 @@ class Post(models.Model):
         filename = "public/static_html/%s_%s_%s_%s.html" % (self.pub_date.strftime("%Y"),
                                          self.pub_date.strftime("%b").lower(), 
                                          self.pub_date.strftime("%d"), self.slug)
-        f = file(filename, "w")
-        f.write(self.body_html)
+        f = file(filename, "wb")
+        f.write(smart_str(self.body_html))
         f.close()
         super(Post, self).save(force_insert, force_update)
 
@@ -84,33 +85,11 @@ class Post(models.Model):
                                   self.pub_date.strftime("%d"),
                                   self.slug )
 
-class Comment(models.Model):
-    visitor = models.CharField(max_length = 60, help_text = "Please enter \
-            your name.")
-    email = models.EmailField(help_text = "Please enter your email.")
-    body = models.TextField()
-    comment_date = models.DateTimeField(auto_now_add = True)
-    post = models.ForeignKey(Post)
-
-    body_html = models.TextField(editable = False)
-
-    def __unicode__(self):
-        return "%s comments %s" % (self.visitor, self.post.title)
-
-    def save(self, force_insert = False, force_update = False):
-        self.body_html = markdown(self.body, ['codehilite'])
-        super(Comment, self).save(force_insert, force_update)
-
-
-class CommentForm:
-    class Meta:
-        model = Comment
-        fields = ['visitor', 'body']
 
 class Link(models.Model):
     title = models.CharField(max_length = 250)
     url = models.URLField('URL', unique = True)
-    #logo_url = models.URLField()
+    logo_url = models.CharField(max_length = 250)
 
     class Meta:
         ordering = ['title']

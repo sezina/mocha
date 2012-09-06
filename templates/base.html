@@ -52,7 +52,9 @@
                           </a>
                           <ul class="dropdown-menu">
                               {% for link in links %}
-                              <li><a href="{{ link.url }}">{{ link.title }}</a></li>
+                              <li><a href="{{ link.url }}">
+                                      <img src="{{ link.logo_url }}" alt="{{ link.title }}" />
+                                      {{ link.title }}</a></li>
                               {% endfor %}
                           </ul>
                       </li>
