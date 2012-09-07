@@ -96,3 +96,21 @@ class Link(models.Model):
 
     def __unicode__(self):
         return self.title
+
+class Comment(models.Model):
+    visitor = models.CharField(max_length = 60)
+    email = models.EmailField()
+    body = models.TextField()
+    comment_date = models.DateTimeField(default = datetime.datetime.now)
+    post = models.ForeignKey(Post)
+
+    # metadata
+    body_html = models.TextField(editable = False)
+
+    def __unicode__(self):
+        return "%s comments at %s" % (self.visitor, 
+                self.comment_date.strftime("%Y%b%d"))
+
+    def save(self, force_insert = False, force_update = False):
+        self.body_html = markdown(self.body, ['codehilite'])
+        super(Comment, self).save(force_insert, force_update)

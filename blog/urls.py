@@ -8,4 +8,5 @@ urlpatterns = patterns('',
     url(r'^category/(?P<slug>[-\w]+)/$', 'blog.views.category_detail'),
     url(r'^(?P<year>\d{4})/(?P<month>\w{3})/$', 'blog.views.archive_detail'),
     url(r'^comments/', include('django.contrib.comments.urls')),
+    url(r'^add_comment/(?P<pk>\d+)/$', 'blog.views.add_comment'),
 )

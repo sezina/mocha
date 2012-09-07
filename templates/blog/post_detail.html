@@ -1,14 +1,55 @@
 {% extends "base.html" %}
 
 {% block content %}
+<div class="article">
 <h2>{{ post.title }}</h2>
+    <div class="post-info">
+        <span>@{{ post.pub_date }}</span>
+        <span>Tags:{{ post.tags }}</span>
+        <span>Categories:{% for category in post.categories.all %}
+        {{ category.title }}
+            {% endfor %}</span>
+    </div>
+<div class="post-body">
 {{ post.body_html|safe }}
+</div>
+</div>
+
+<a href="#" data-toggle="collapse" data-target="#form">Add Comment</a>
+<form id="form" class="collapse" action="{% url blog.views.add_comment post.id %}" method="post">{% csrf_token %}
+    <div class="form">
+        <p>
+            <label for="id_visitor">Name</label>
+            <input class="span3 input" type="text" name="visitor" 
+            placeholder="Please enter your name." />
+        </p>
+        <p>
+            <label for="id_email">Email</label>
+            <input class="span3 input" type="text" name="email" 
+            placeholder="Please enter your email."/>
+        </p>
+        <div>
+            <label for="id_body">Comment</label>
+            <textarea class="span8" id="comment_body" name="body" rows="5" 
+                placeholder="Please enter your comment."></textarea>
+        </div>
+            <input type="submit" value="Submit" />
+    </div>
+</form>
 
 {% if comments %}
-    <p>Comments:</p>
+<h3>{{ comments.count }} comments:</h3>
+{% for comment in comments %}
+<div class="comment">
+    <div class="comment-author">
+        <span>
+            <b>{{ comment.visitor }}</b> 
+            @{{ comment.comment_date }}
+        </span>
+    </div>
+    {{ comment.body_html|safe }}
+</div>
+{% endfor %}
 {% endif %}
-
-{% load comments %}
-{% render_comment_form for post %}
 
 {% endblock %}

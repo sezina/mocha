@@ -3,6 +3,8 @@ from datetime import datetime
 from django.shortcuts import render_to_response, get_object_or_404
 from django.views.generic.list_detail import object_list
 from django.views.decorators import csrf
+from django.template import RequestContext
+from django.http import HttpResponseRedirect
 from models import *
 
 def archive_list(request):
@@ -47,8 +49,10 @@ def post_detail(request, year, month, day, slug):
     return render_to_response('blog/post_detail.html',
             { 'post': post,
               'time_line': time_line,
-              'categories': 
-              'links': Link.objects.all() })
+              'categories': Category.objects.all(),
+              'links': Link.objects.all(),
+              'comments': post.comment_set.all() },
+            context_instance = RequestContext(request))
 
 
 def category_detail(request, slug):
@@ -74,3 +78,23 @@ def archive_detail(request, year, month):
               'links': Link.objects.all(),
               'time_line': time_line })
 
+def add_comment(request, pk):
+    post = Post.live.get(pk = int(pk))
+    year = post.pub_date.strftime("%Y")
+    month = post.pub_date.strftime("%b")
+    day = post.pub_date.strftime("%d")
+    slug = post.slug
+    if request.POST:
+        visitor = request.POST.get('visitor', None)
+        email = request.POST.get('email', None)
+        body = request.POST.get('body', None)
+
+        if visitor and email and body:
+            comment = Comment()
+            comment.visitor = visitor
+            comment.email = email
+            comment.body = body
+            comment.comment_date = datetime.datetime.now()
+            comment.post = post
+            comment.save()
+    return HttpResponseRedirect(post.get_absolute_url())
