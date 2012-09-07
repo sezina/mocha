@@ -6,7 +6,6 @@ This is a simple blog system for myself.
 
 * django 1.4
 * django-tagging
-* pydelicious
 
 # About the name
 
