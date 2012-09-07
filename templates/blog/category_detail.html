@@ -1,5 +1,9 @@
 {% extends "base.html" %}
 
+{% block title %}
+| {{ category.title }} | {{ category.slug }}
+{% endblock %}
+
 {% block content %}
 
 {% include "entry.html" %}

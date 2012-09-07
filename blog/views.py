@@ -7,7 +7,7 @@ from django.template import RequestContext
 from django.http import HttpResponseRedirect
 from models import *
 
-def archive_list(request):
+def archive_list():
     this_year = datetime.datetime.now().year
     posts = Post.live.order_by('pub_date')
     if posts.count() == 0:
@@ -22,7 +22,7 @@ def archive_list(request):
     return [item for item in archive_time_list]
 
 def index(request):
-    time_line = archive_list(request)
+    time_line = archive_list()
     return render_to_response('blog/index.html',
             { 'posts': Post.live.all(),
               'categories': Category.objects.all(),
@@ -30,7 +30,7 @@ def index(request):
               'time_line': time_line })
 
 def about(request):
-    time_line = archive_list(request)
+    time_line = archive_list()
     return render_to_response('about.html',
             { 'posts': Post.live.all(),
               'categories': Category.objects.all(),
@@ -38,7 +38,7 @@ def about(request):
               'time_line': time_line })
 
 def post_detail(request, year, month, day, slug):
-    time_line = archive_list(request)
+    time_line = archive_list()
     import datetime, time
     date_stamp = time.strptime(year + month + day, "%Y%b%d")
     pub_date = datetime.date(*date_stamp[:3])
@@ -57,7 +57,7 @@ def post_detail(request, year, month, day, slug):
 
 def category_detail(request, slug):
     category = get_object_or_404(Category, slug = slug)
-    time_line = archive_list(request)
+    time_line = archive_list()
     return render_to_response('blog/category_detail.html',
             { 'posts': category.post_set.all(),
               'category': category,
@@ -66,7 +66,7 @@ def category_detail(request, slug):
               'time_line': time_line })
 
 def archive_detail(request, year, month):
-    time_line = archive_list(request)
+    time_line = archive_list()
     import datetime, time
     date_stamp = time.strptime(year + month + "1", "%Y%b%d")
     pub_date = datetime.date(*date_stamp[:3])
@@ -80,10 +80,6 @@ def archive_detail(request, year, month):
 
 def add_comment(request, pk):
     post = Post.live.get(pk = int(pk))
-    year = post.pub_date.strftime("%Y")
-    month = post.pub_date.strftime("%b")
-    day = post.pub_date.strftime("%d")
-    slug = post.slug
     if request.POST:
         visitor = request.POST.get('visitor', None)
         email = request.POST.get('email', None)

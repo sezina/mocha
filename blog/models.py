@@ -24,7 +24,6 @@ class Category(models.Model):
     def live_post_set(self):
         return self.post_set.filter(status = Post.LIVE_STATUS)
 
-    #@models.permalink
     def get_absolute_url(self):
         return "/category/%s/" % self.slug 
 
@@ -78,7 +77,6 @@ class Post(models.Model):
         f.close()
         super(Post, self).save(force_insert, force_update)
 
-    #@models.permalink
     def get_absolute_url(self):
         return "/%s/%s/%s/%s/" % (self.pub_date.strftime("%Y"),
                                   self.pub_date.strftime("%b").lower(),
@@ -106,6 +104,9 @@ class Comment(models.Model):
 
     # metadata
     body_html = models.TextField(editable = False)
+
+    class Meta:
+        ordering = ['-comment_date']
 
     def __unicode__(self):
         return "%s comments at %s" % (self.visitor, 
