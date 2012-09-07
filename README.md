@@ -6,7 +6,10 @@ This is a simple blog system for myself.
 
 * django 1.4
 * django-tagging
+* markdown
+
+Using bootstrap 2.1.1 and pygments-css.
 
 # About the name
 
-There was a cup of Mocha coffee on my desktop when I was starting this project.
+I was drinking a cup of Mocha coffee when I was starting this project.
