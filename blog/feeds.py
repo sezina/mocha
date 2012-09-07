@@ -6,6 +6,7 @@ from models import Post
 
 current_site = Site.objects.get_current()
 
+
 class LatestPostsFeed(Feed):
     description = "Latest posts posted to %s" % current_site.name
     feed_type = Atom1Feed
