@@ -13,3 +13,7 @@ Using bootstrap 2.1.1 and pygments-css.
 # About the name
 
 I was drinking a cup of Mocha coffee when I was starting this project.
+
+# Notice
+
+Replace 'highlight' class with 'codehilite' in pygments-css.
