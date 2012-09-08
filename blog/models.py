@@ -102,6 +102,7 @@ class Link(models.Model):
 class Comment(models.Model):
     visitor = models.CharField(max_length=60)
     email = models.EmailField()
+    website = models.URLField()
     body = models.TextField()
     comment_date = models.DateTimeField(default=datetime.datetime.now)
     post = models.ForeignKey(Post)

@@ -2,6 +2,6 @@
 test.db
 
 # static file
-public/static_html/
+public/static_html/*.html
 
 *.pyc

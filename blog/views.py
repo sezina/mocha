@@ -5,6 +5,7 @@ from django.views.generic.list_detail import object_list
 from django.template import RequestContext
 from django.http import HttpResponseRedirect
 from models import *
+from forms import CommentForm
 
 
 def archive_list():
@@ -50,8 +51,10 @@ def post_detail(request, year, month, day, slug):
                                    pub_date__month=pub_date.month,
                                    pub_date__day=pub_date.day,
                                    slug=slug)
+    form = CommentForm()
     return render_to_response('blog/post_detail.html',
             {'post': post,
+             'form': form,
              'time_line': time_line,
              'categories': Category.objects.all(),
              'links': Link.objects.all(),
@@ -85,19 +88,27 @@ def archive_detail(request, year, month):
              'time_line': time_line})
 
 
+def save_comment(comment, post):
+    c = Comment()
+    c.post = post
+    c.visitor = comment.cleaned_data['visitor']
+    c.email = comment.cleaned_data['email']
+    c.website = comment.cleaned_data['website']
+    c.body = comment.cleaned_data['body']
+    c.save()
+
 def add_comment(request, pk):
     post = Post.live.get(pk=int(pk))
     if request.POST:
-        visitor = request.POST.get('visitor', None)
-        email = request.POST.get('email', None)
-        body = request.POST.get('body', None)
+        comment = CommentForm(request.POST)
+        if comment.is_valid():
+            save_comment(comment, post)
+            return HttpResponseRedirect(post.get_absolute_url())
 
-        if visitor and email and body:
-            comment = Comment()
-            comment.visitor = visitor
-            comment.email = email
-            comment.body = body
-            comment.comment_date = datetime.datetime.now()
-            comment.post = post
-            comment.save()
-    return HttpResponseRedirect(post.get_absolute_url())
+    time_line = archive_list()
+    return render_to_response('blog/post_detail.html', {'post': post,
+        'form': comment,
+        'categories': Category.objects.all(),
+        'links': Link.objects.all(),
+        'time_line': time_line},
+        context_instance = RequestContext(request))
